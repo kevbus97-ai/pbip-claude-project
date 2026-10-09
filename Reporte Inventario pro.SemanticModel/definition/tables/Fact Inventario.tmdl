@@ -1,0 +1,71 @@
+table 'Fact Inventario'
+	lineageTag: b4e6cdf7-f95c-4c8d-a4a9-788fe3fca5b5
+
+	column store_id
+		dataType: string
+		lineageTag: 97a6ae05-e4df-4e70-89e1-68d3ce58677c
+		summarizeBy: none
+		sourceColumn: store_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column sku_id
+		dataType: string
+		lineageTag: fb6a8937-2b7f-41f5-8971-4a2e58cb3bef
+		summarizeBy: none
+		sourceColumn: sku_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column stock_on_hand
+		dataType: int64
+		formatString: 0
+		lineageTag: f219e72f-b815-4435-8289-f5cd398418b8
+		summarizeBy: sum
+		sourceColumn: stock_on_hand
+
+		annotation SummarizationSetBy = Automatic
+
+	column reorder_point
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b373e61-6881-4643-8423-87bba2671bd7
+		summarizeBy: sum
+		sourceColumn: reorder_point
+
+		annotation SummarizationSetBy = Automatic
+
+	column safety_stock
+		dataType: int64
+		formatString: 0
+		lineageTag: 86925f99-28ba-4c5b-9fb3-586c827a7dbc
+		summarizeBy: sum
+		sourceColumn: safety_stock
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_restock_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7bb4ed79-ceb5-414c-85bf-34f60f48c457
+		summarizeBy: none
+		sourceColumn: last_restock_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition 'Fact Inventario' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\kevin\Documents\Contenido\Proyectos\CI_CD AI\Editables\archive (3)\retail_clean_dataset\inventory_snapshot.csv"),[Delimiter=",", Columns=6, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"store_id", type text}, {"sku_id", type text}, {"stock_on_hand", Int64.Type}, {"reorder_point", Int64.Type}, {"safety_stock", Int64.Type}, {"last_restock_date", type date}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

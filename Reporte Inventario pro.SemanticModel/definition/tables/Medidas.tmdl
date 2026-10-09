@@ -1,0 +1,71 @@
+table Medidas
+	lineageTag: 04fa0c6a-888f-4b91-995f-d2171c3d79cb
+
+	measure Ventas = SUM('Fact Ventas'[total_value])
+		formatString: #,0
+		displayFolder: Metricas Generales
+		lineageTag: c6b89715-4a37-46a6-a6b6-390d70236f36
+
+	measure 'Cantidad Productos' = SUM('Fact Ventas'[quantity])
+		formatString: 0
+		displayFolder: Metricas Generales
+		lineageTag: 939db998-3de6-4286-a6f5-dcaa6f5e0774
+
+	measure Tickets =
+			
+			DISTINCTCOUNT ( 'Fact Ventas'[receipt_id] )
+		formatString: 0
+		displayFolder: Metricas Generales
+		lineageTag: 02ca20ca-3b4a-45d2-a8ab-be81788eee09
+
+	measure 'Costo de Ventas' =
+			
+			SUMX (
+			    'Fact Ventas',
+			    'Fact Ventas'[quantity] * RELATED ( 'Dim SKU'[cost_price] )
+			)
+		displayFolder: Metricas Generales
+		lineageTag: 597e266d-3e31-48d3-86bb-412ae6303106
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Margen Bruto' = [Ventas] - [Costo de Ventas]
+		formatString: #,##0.00
+		displayFolder: Metricas Generales
+		lineageTag: 2dc94c35-d7b6-4c1c-aed0-7c7d11649b45
+
+	measure 'Margen %' = DIVIDE ( [Margen Bruto], [Ventas] )
+		formatString: 0.0%
+		displayFolder: Metricas Generales
+		lineageTag: 4047178f-8f9f-45e7-929a-dffdeb84e20f
+
+	measure 'Stock Disponible' = SUM ( 'Fact Inventario'[stock_on_hand] )
+		formatString: #,##0
+		displayFolder: Metricas Generales
+		lineageTag: efbab673-6047-4a9d-87a1-1f06e16307e6
+
+	measure Ventas(M) = DIVIDE(SUM('Fact Ventas'[total_value]),1000000,0)
+		formatString: #,0.0
+		displayFolder: Metricas Generales
+		lineageTag: 69858ed0-b407-419e-9fa9-bc04193b71e3
+
+	column Column
+		isHidden
+		formatString: 0
+		displayFolder: Metricas Generales
+		lineageTag: 6e189170-d55e-41a5-b2a6-c64a2bad9aaf
+		isDefaultLabel
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = f4208ce8f92b4830b7c2b3af55ab8de5
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

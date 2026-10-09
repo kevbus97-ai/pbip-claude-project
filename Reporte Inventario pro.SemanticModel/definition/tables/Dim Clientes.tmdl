@@ -1,0 +1,77 @@
+table 'Dim Clientes'
+	lineageTag: 497fc054-44b0-4863-9549-95ba5c369388
+
+	column cust_id
+		dataType: string
+		lineageTag: d4a0b6ff-dabf-43a4-b6c1-f17f55e8eee9
+		summarizeBy: none
+		sourceColumn: cust_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column age
+		dataType: int64
+		formatString: 0
+		lineageTag: 4c92c8ef-2315-4350-bf7d-2ee2db9eadc8
+		summarizeBy: sum
+		sourceColumn: age
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: dd2d0549-964f-4a96-a397-44ec1a132c76
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 46a0901b-bf2d-42e0-9f9a-b562a7048039
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column loyalty_segment
+		dataType: string
+		lineageTag: 0c10947a-8b95-4d19-8a61-86de1e8276e9
+		summarizeBy: none
+		sourceColumn: loyalty_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column preferred_channel
+		dataType: string
+		lineageTag: 29b310ad-068e-4a2c-aef5-ea5616452bf5
+		summarizeBy: none
+		sourceColumn: preferred_channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column registration_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 256e10a4-b5f9-4e8e-9a63-98687a9b354b
+		summarizeBy: none
+		sourceColumn: registration_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition 'Dim Clientes' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\kevin\Documents\Contenido\Proyectos\CI_CD AI\Editables\archive (3)\retail_clean_dataset\customer_master.csv"),[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"cust_id", type text}, {"age", Int64.Type}, {"gender", type text}, {"city", type text}, {"loyalty_segment", type text}, {"preferred_channel", type text}, {"registration_date", type date}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

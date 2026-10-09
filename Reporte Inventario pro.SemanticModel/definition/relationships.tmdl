@@ -1,0 +1,24 @@
+relationship AutoDetected_19e22f95-5380-4dd0-bbe2-eb85812510ce
+	fromColumn: 'Fact Inventario'.store_id
+	toColumn: 'Dim Tiendas'.store_id
+
+relationship AutoDetected_199e3cf4-ecbf-4e11-b361-d1e6354b4b9c
+	fromColumn: 'Fact Ventas'.store_id
+	toColumn: 'Dim Tiendas'.store_id
+
+relationship AutoDetected_e6e58681-06d4-4756-beee-384d8e2a5319
+	fromColumn: 'Fact Inventario'.sku_id
+	toColumn: 'Dim SKU'.sku_id
+
+relationship AutoDetected_3af696b1-6ae2-4c1c-a1e7-2b45440ac17f
+	fromColumn: 'Fact Ventas'.sku_id
+	toColumn: 'Dim SKU'.sku_id
+
+relationship b8601672-860f-d7e7-3ae1-9ddf72e54f2a
+	fromColumn: 'Fact Ventas'.customer_id
+	toColumn: 'Dim Clientes'.cust_id
+
+relationship 268a25e0-37a9-694b-6cf3-b7dd19fc6162
+	fromColumn: 'Fact Ventas'.date
+	toColumn: 'Dim Date'.Date
+

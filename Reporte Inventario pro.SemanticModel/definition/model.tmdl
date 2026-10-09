@@ -1,0 +1,25 @@
+model Model
+	culture: es-PE
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-PE
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Dim Clientes","Fact Inventario","Fact Ventas","Dim SKU","Dim Tiendas"]
+
+annotation PBI_ProTooling = ["DevMode","TMDLView_Desktop"]
+
+ref table 'Dim Clientes'
+ref table 'Fact Inventario'
+ref table 'Fact Ventas'
+ref table 'Dim SKU'
+ref table 'Dim Tiendas'
+ref table Medidas
+ref table 'Dim Date'
+
+ref cultureInfo es-PE
+

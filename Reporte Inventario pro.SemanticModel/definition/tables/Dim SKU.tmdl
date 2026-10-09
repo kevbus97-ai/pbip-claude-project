@@ -1,0 +1,77 @@
+table 'Dim SKU'
+	lineageTag: 0fa6fb60-0796-478f-a8c3-c7f578ba8fb5
+
+	column sku_id
+		dataType: string
+		lineageTag: fb14c453-10ad-4019-8b05-a7a679035a76
+		summarizeBy: none
+		sourceColumn: sku_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column sku_name
+		dataType: string
+		lineageTag: f77f8181-35c0-470a-954a-b1d489a54df5
+		summarizeBy: none
+		sourceColumn: sku_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: 3face78c-512b-48b9-bf64-0145ecc3a6a1
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column subcategory
+		dataType: string
+		lineageTag: b7e4db63-de0c-4ea7-bf08-23c041b40efc
+		summarizeBy: none
+		sourceColumn: subcategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_price
+		dataType: double
+		lineageTag: 57ce74ef-cffa-4fe6-9579-5c3bc8bcaaae
+		summarizeBy: sum
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column cost_price
+		dataType: double
+		lineageTag: 9fd2aad2-f8fe-486e-be51-e098ef48d486
+		summarizeBy: sum
+		sourceColumn: cost_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column brand
+		dataType: string
+		lineageTag: 75941c42-bf8c-42a9-9f33-906aef096b80
+		summarizeBy: none
+		sourceColumn: brand
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim SKU' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\kevin\Documents\Contenido\Proyectos\CI_CD AI\Editables\archive (3)\retail_clean_dataset\sku_master.csv"),[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"sku_id", type text}, {"sku_name", type text}, {"category", type text}, {"subcategory", type text}, {"unit_price", type number}, {"cost_price", type number}, {"brand", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

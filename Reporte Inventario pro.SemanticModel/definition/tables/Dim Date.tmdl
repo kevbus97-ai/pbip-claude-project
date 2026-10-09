@@ -1,0 +1,65 @@
+table 'Dim Date'
+	lineageTag: f83acc77-c667-48bf-8ee5-b51d2a02d57d
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: Short Date
+		lineageTag: 6b8c3925-c45e-4ff8-8599-f23b13bc4bea
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Semestre = ROUNDUP('Dim Date'[Mes nro]/6, 0)
+		lineageTag: 8eda9da5-d8f8-4201-9e94-e57f1addb8fe
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes nro' = MONTH('Dim Date'[Date])
+		formatString: 0
+		lineageTag: a631c3ce-e82b-4459-be1f-f2b5b47e48d5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año = YEAR('Dim Date'[Date])
+		formatString: 0
+		lineageTag: da153d2f-655c-4a36-b228-b51284733012
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Día = DAY('Dim Date'[Date])
+		formatString: 0
+		lineageTag: 3c8aaf1d-f45b-4303-b128-ae75e49f78ef
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes = FORMAT ( [Date], "MMMM" )
+		lineageTag: 007ac869-e295-4245-bdc7-39856f18018d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año-Mes = FORMAT ( [Date], "YYYY-MM" )
+		lineageTag: f2744bdb-9736-4aae-8ad6-07ca9b38bff6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre = "T" & FORMAT ( [Date], "Q" )
+		lineageTag: b11825e9-912f-425a-901c-e508e1478720
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Date' = calculated
+		mode: import
+		source = CALENDAR(MIN('Fact Ventas'[date]), TODAY())
+
+	annotation PBI_Id = 75ee6f21956b465c94e31d8c71244b57
+

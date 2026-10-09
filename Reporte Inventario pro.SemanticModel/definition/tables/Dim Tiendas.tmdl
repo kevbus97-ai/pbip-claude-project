@@ -1,0 +1,60 @@
+table 'Dim Tiendas'
+	lineageTag: de582797-ff45-45d8-8397-302fdba4d951
+
+	column store_id
+		dataType: string
+		lineageTag: 2e9a3645-5026-4cb0-afce-a716ae856fba
+		summarizeBy: none
+		sourceColumn: store_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_name
+		dataType: string
+		lineageTag: d6088206-b91d-4075-a431-e40a85a3c4b7
+		summarizeBy: none
+		sourceColumn: store_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: e93e7117-cf8a-4bab-87f6-34d29f524175
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_type
+		dataType: string
+		lineageTag: bce375dc-5b48-41a0-95c1-255a8be130da
+		summarizeBy: none
+		sourceColumn: store_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column opening_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7ab881f8-a33e-4ec7-b5c8-05a57764ef23
+		summarizeBy: none
+		sourceColumn: opening_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition 'Dim Tiendas' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\kevin\Documents\Contenido\Proyectos\CI_CD AI\Editables\archive (3)\retail_clean_dataset\store_master.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"store_id", type text}, {"store_name", type text}, {"city", type text}, {"store_type", type text}, {"opening_date", type date}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

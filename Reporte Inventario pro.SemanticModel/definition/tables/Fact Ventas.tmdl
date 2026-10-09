@@ -1,0 +1,114 @@
+table 'Fact Ventas'
+	lineageTag: 14c51a97-d5c9-48cc-85e8-4ee464773799
+
+	column date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: b8264db7-177f-492f-bfa5-f76713ce0da7
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column receipt_id
+		dataType: string
+		lineageTag: a26bfb7d-ca73-40f3-9ba2-8e0de3d0cea5
+		summarizeBy: none
+		sourceColumn: receipt_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column store_id
+		dataType: string
+		lineageTag: 98fb1f62-c090-4a65-9c3d-43d5f531533d
+		summarizeBy: none
+		sourceColumn: store_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column sku_id
+		dataType: string
+		lineageTag: f5e69482-fa8b-400f-866a-34b6e6480a31
+		summarizeBy: none
+		sourceColumn: sku_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: ff6e6515-5ff1-44d8-aa22-0bfb90a97ded
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 139bd038-c5c0-4f51-bfe3-4764f32d0707
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_price
+		dataType: double
+		lineageTag: cbb8c11d-d9e7-486e-aabd-f0f413c62538
+		summarizeBy: sum
+		sourceColumn: unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_value
+		dataType: double
+		formatString: #,0
+		lineageTag: 3aec524e-31be-4723-b543-e14b931d148c
+		summarizeBy: sum
+		sourceColumn: total_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: 87ca8541-8466-41e6-9c78-9f58f5e0377b
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column discount_pct
+		dataType: double
+		lineageTag: d7695d08-0b08-4084-84e3-cd4ac8984307
+		summarizeBy: sum
+		sourceColumn: discount_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column promo_id
+		dataType: string
+		lineageTag: c651fdbb-f5eb-4fc3-9a62-304a34376a1b
+		summarizeBy: none
+		sourceColumn: promo_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Fact Ventas' = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("C:\Users\kevin\Documents\Contenido\Proyectos\CI_CD AI\Editables\archive (3)\retail_clean_dataset\sales_transactions.csv"),[Delimiter=",", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"date", type date}, {"receipt_id", type text}, {"store_id", type text}, {"sku_id", type text}, {"customer_id", type text}, {"quantity", Int64.Type}, {"unit_price", type number}, {"total_value", type number}, {"channel", type text}, {"discount_pct", type number}, {"promo_id", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
